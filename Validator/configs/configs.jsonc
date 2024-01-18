@@ -1,0 +1,8 @@
+{
+  //* Validation method used by SPIN
+  "ValidationProcess": "BFS",
+  //* Default validation result empty, since we want the validation to be performed
+  "DefaultValidationResult": "",
+  //* Maximum time spent on the validation process
+  "ValidationTimeout": 300
+}

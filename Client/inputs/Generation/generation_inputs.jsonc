@@ -1,0 +1,127 @@
+{
+  //* generation process configurations
+  "Generator": {
+    "Learning": {
+      //* number of simulations
+      "NumberOfSimulations": 1,
+      //* number of training episodes running in each simulation
+      "NumberOfEpisodes": 1000
+    },
+    "Generation": {
+      //* maximum number of types allowed in the algorithm
+      "MaxNumberOfMessageTypes": 2,
+      // * intermediate validation process
+      "IntermediateValidationProcess": { "Mode": false, "NumberOfSteps": 1 },
+      //* heuristics
+      "Heuristics": {
+        //* HEURISTIC 1: do not allow repetitive actions on the entire algorithm (except the STOP action, since we only have one)
+        "1": { "Mode": true },
+        //* HEURISTIC 2: allow only the defined actions on the specific phases
+        "2": {
+          "Mode": true,
+          "Extra": {
+            "RB-Broadcast": {
+              "SendAll": true,
+              "SendNeighbors": true,
+              "SendMyself": true,
+              "Deliver": false
+            },
+            "Receive": {
+              "SendAll": true,
+              "SendNeighbors": true,
+              "SendMyself": true,
+              "Deliver": true
+            }
+          }
+        },
+        //* HEURISTIC 3: allow only the conditions based on the defined expressions
+        "3": {
+          "Mode": true,
+          "Extra": {
+            "RB-Broadcast": {
+              "1": false,
+              "F+1": false,
+              "(N+F)/2": false,
+              "N-F": false,
+              "True": true
+            },
+            "Receive": {
+              "1": true,
+              "F+1": true,
+              "(N+F)/2": true,
+              "N-F": true,
+              "True": true
+            }
+          }
+        },
+        //* HEURISTIC 4: we can only select one SEND action, for each combination of type and condition
+        "4": { "Mode": true },
+        //* HEURISTIC 5: init is defined by messages with type 0
+        "5": { "Mode": true },
+        //* HEURISTIC 6: define max number of actions allowed in each phase (we must count with the STOP action)
+        "6": {
+          "Mode": true,
+          "Extra": {
+            "RB-Broadcast": {
+              //* minimum 2 because of the STOP action
+              "Min": 2,
+              "Max": 2
+            },
+            "Receive": {
+              //* minimum 2 because of the STOP action
+              "Min": 2,
+              "Max": 4
+            }
+          }
+        },
+        //* HEURISTIC 7: we only allow actions with conditions waiting for the types of messages already presented on the algorithm (if none, we only allow the condition type 0)
+        "7": { "Mode": true },
+        //* HEURISTIC 8: the generated algorithm must contain, at least, one deliver/decide action
+        "8": { "Mode": true },
+        //* HEURISTIC 9: block states that lead to incorrect algorithms
+        "9": { "Mode": true },
+        //* HEURISTIC 10: do not allow to choose action that lead to algorithm with a worst reward than the most efficient correct algorithm
+        "10": { "Mode": true }
+      },
+      //* rewards
+      "AlgorithmCharacteristics": {
+        //* weigh of the characteristics of the algorithm (set the highest value to the most important characteristic)
+        "NumberOfMessagesSent": 0.7,
+        "NumberOfMessagesRequired": 0.2,
+        "NumberOfCommunicationSteps": 0.1
+      },
+      //* rewards
+      "Rewards": {
+        //* logic rewards
+        "Logic": {
+          "SendMyself": -2,
+          "SendNeighbors": -5,
+          "SendAll": -6,
+          "Deliver": -1,
+          "Stop": 0
+        },
+        "Condition": {
+          "Thresholds": {
+            "1": -1,
+            "F+1": -2,
+            "(N+F)/2": -3,
+            "N-F": -4
+          },
+          "True": 0
+        },
+        //* message type reward
+        "MessageType": -1,
+        //* event rewards
+        "Event": {
+          "RB-Broadcast": 0,
+          "Receive": -1
+        }
+      },
+      "BonusRewards": {
+        //* correct/incorrect algorithm reward
+        "Correct": 100,
+        "Incorrect": -1
+      }
+    }
+  }
+}

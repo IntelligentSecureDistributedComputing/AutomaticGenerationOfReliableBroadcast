@@ -1,0 +1,15 @@
+version: "3"
+services:
+  validator:
+    image: validatorfaultageimage
+    container_name: validatorcontainer
+    command: ['sh', '-c','./scripts/local/start.sh']
+    user: root
+    stdin_open: true
+    tty: true
+    networks:
+      docker_faultageNetwork:
+        ipv4_address: 172.24.2.2
+networks:
+  docker_faultageNetwork:
+    external: true

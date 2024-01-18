@@ -1,0 +1,26 @@
+{
+  "Validator": {
+    "Validation": {
+      "FailureMode": {
+        "NO_FAILURE": { "Mode": true, "TestCases": [{ "N": 4, "F": 0 }] },
+        "CRASH_FAILURE": { "Mode": false, "TestCases": [{ "N": 4, "F": 2 }] },
+        "BYZANTINE_FAILURE": {
+          "Mode": false,
+          "TestCases": [{ "N": 4, "F": 1 }]
+        }
+      },
+      "Properties": {
+        "FinalValidation": {
+          "validity": true, // all correct processes must decide the same message
+          "agreement": true, // if the broadcaster is correct, than it must decide the message
+          "integrity": true // no correct process can deliver the same message more than once and, if the broadcaster is correct, no correct process can deliver a message not initiated by the broadcaster}
+        },
+        "IntermediateValidation": {
+          "validity": false, // all correct processes must decide the same message
+          "agreement": false, // if the broadcaster is correct, than it must decide the message
+          "integrity": true // no correct process can deliver the same message more than once and, if the broadcaster is correct, no correct process can deliver a message not initiated by the broadcaster}
+        }
+      }
+    }
+  }
+}

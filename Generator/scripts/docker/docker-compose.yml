@@ -1,0 +1,21 @@
+version: "3"
+services:
+  generator:
+    image: generatorfaultageimage
+    container_name: generatorcontainer
+    command: ['sh', '-c','./scripts/local/start.sh']
+    user: generator
+    stdin_open: true
+    tty: true
+    networks:
+      faultageNetwork:
+        ipv4_address: 172.24.2.1
+    volumes:
+      - ../../output:/home/generator/output
+networks:
+  faultageNetwork:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.24.2.0/16"

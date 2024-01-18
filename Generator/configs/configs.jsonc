@@ -1,0 +1,48 @@
+{
+  // * Number of episodes after which the agent will output the results
+  "ResultsBatch": 1000,
+  // * Exploration Algorithm
+  "ExplorationAlgorithm": {
+    //* Random policy
+    "Random": {
+      "Mode": false
+    },
+    //* UCB policy
+    "UCB": {
+      "Mode": true,
+      "Hyperparameters": {
+        "exploration_factor": 0 //* value that defines the exploration phase of the agent. The higher the value, the longer the exploration phase; (0-...)
+      }
+    },
+    //* Greedy policy
+    "Greedy": {
+      "Mode": false
+    },
+    //* EpsilonGreedy policy
+    "EpsilonGreedy": {
+      "Mode": false,
+      "Hyperparameters": {
+        "epsilon": 1,
+        "max_epsilon": 1,
+        "min_epsilon": 0.001,
+        "decay_rate": 0.005
+      }
+    }
+  },
+  "LearningAlgorithm": {
+    //* Q-Learning algorithm
+    "QLearning": {
+      "Mode": true,
+      "Extra": {
+        "DoubleQLearning": {
+          //* use two different tables to learn
+          "Mode": false
+        }
+      },
+      "Hyperparameters": {
+        "learning_rate": 0.01, //* importance of learning: The higher the value, the faster the agent learns; (0.1 - 0.001)
+        "gamma": 0.95 //* importance of future rewards. The higher the value, the higher the importance of future rewards; (0-1)
+      }
+    }
+  }
+}

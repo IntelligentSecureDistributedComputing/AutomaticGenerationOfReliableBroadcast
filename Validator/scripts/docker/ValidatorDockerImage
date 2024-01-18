@@ -1,0 +1,56 @@
+# specify the base image
+FROM ubuntu:22.10
+# use root user
+USER root
+# set working directory
+WORKDIR /home/validator
+# update image
+RUN apt update && apt upgrade -y
+# copy content to container
+COPY . .
+# install gcc
+RUN echo "Y" | apt-get install gcc
+# install python 3.10
+RUN echo "Y" | apt install python3.10
+RUN echo "Y" | apt install python3.10-venv
+# install spin
+RUN apt-get install spin
+# setup environment
+RUN echo "Creating Python environment..."
+RUN echo ""
+RUN python3.10 -m venv validator_env
+RUN validator_env/bin/python -m pip install -r scripts/local/requirements.txt
+RUN echo ""
+RUN echo "Done!"
+RUN echo ""
+RUN echo ""
+RUN echo "Installing Spin..."
+RUN echo ""
+RUN apt-get install spin
+RUN echo ""
+RUN echo "Done!"
+RUN echo ""
+RUN echo ""
+RUN echo "Creating the env file..."
+RUN echo ""
+RUN echo '# generator component hostname \n\
+GENERATOR_HOST = 172.24.2.1\n\
+# generator component port\n\
+GENERATOR_PORT = 5001\n\
+# validator component hostname\n\
+VALIDATOR_HOST = 172.24.2.2\n\
+# validator component port\n\
+VALIDATOR_PORT = 5002\n\
+# validation process data\n\
+SPIN_DVECTORSZ = 50000\n\
+# BFS validation process data\n\
+SPIN_BFS_NUMBER_OF_CORES = 1\n\
+SPIN_BFS_HASH_TABLE_SIZE = 28\n\
+# DFS validation process data\n\
+SPIN_DFS_DMEMLIM = 8000\n\
+SPIN_DFS_DVMAX = 3064\n\
+SPIN_DFS_DNCORE = 6\n\
+# SWARM validation process data\n\
+SPIN_SWARM_CORES=6\n'> .env
+# open port
+EXPOSE 5002

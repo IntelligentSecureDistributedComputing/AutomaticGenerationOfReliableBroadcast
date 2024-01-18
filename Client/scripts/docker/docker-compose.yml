@@ -1,0 +1,15 @@
+version: "3"
+services:
+  client:
+    image: clientfaultageimage
+    container_name: clientcontainer
+    command: ['sh', '-c','./scripts/local/start_RBLearner.sh']
+    user: client
+    stdin_open: true
+    tty: true
+    networks:
+      docker_faultageNetwork:
+        ipv4_address: 172.24.2.3
+networks:
+  docker_faultageNetwork:
+    external: true

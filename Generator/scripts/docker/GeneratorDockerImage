@@ -1,0 +1,38 @@
+# specify the base image
+FROM ubuntu:22.10
+# create user
+RUN useradd generator
+# set working directory
+WORKDIR /home/generator
+# update image
+RUN apt update && apt upgrade -y
+# install python 3.10
+RUN echo "Y" | apt install python3.10
+RUN echo "Y" | apt install python3.10-venv
+# copy content to container
+COPY . .
+# setup environment
+RUN echo ""
+RUN echo "Creating Python environment..."
+RUN echo ""
+RUN python3.10 -m venv generator_env
+RUN generator_env/bin/python -m pip install -r scripts/local/requirements.txt
+RUN echo ""
+RUN echo "Done!"
+RUN echo ""
+RUN echo ""
+RUN echo "Creating the env file..."
+RUN echo ""
+RUN echo $'# generator component hostname\n\
+GENERATOR_HOST=172.24.2.1\n\
+# generator component port\n\
+GENERATOR_PORT=5001\n\
+# validator component hostname\n\
+VALIDATOR_HOST=172.24.2.2\n\
+# validator component port\n\
+VALIDATOR_PORT=5002\n' > .env
+RUN echo ""
+RUN echo "Done!"
+RUN echo ""
+# open port
+EXPOSE 5001
